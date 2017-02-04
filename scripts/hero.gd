@@ -9,10 +9,10 @@ var pitch = 0
 const FLY_SPEED=100
 const FLY_ACCEL=4
 
-func _input(ie):
-	if ie.type == InputEvent.MOUSE_MOTION:
-		yaw = fmod(yaw - ie.relative_x * view_sensitivity, 360)
-		pitch = max(min(pitch - ie.relative_y * view_sensitivity, 90), -90)
+func _input(event):
+	if event.type == InputEvent.MOUSE_MOTION:
+		yaw = fmod(yaw - event.relative_x * view_sensitivity, 360)
+		pitch = max(min(pitch - event.relative_y * view_sensitivity, 90), -90)
 		get_node("yaw").set_rotation(Vector3(0, deg2rad(yaw), 0))
 		get_node("yaw/heroCamera").set_rotation(Vector3(deg2rad(pitch), 0, 0))
 
@@ -21,7 +21,6 @@ func _fixed_process(delta):
 
 func _ready():
 	self.set_fixed_process(true)
-	self.set_process(true)	
 	self.set_process_input(true)
 
 func _enter_tree():
@@ -31,6 +30,13 @@ func _exit_tree():
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 
 func _fly(delta):
+	# Check if player clicked Escape button
+	if(Input.is_key_pressed(KEY_ESCAPE)):
+		# Check if player clicked Shift button
+		if(Input.is_key_pressed(KEY_SHIFT)):
+			# If both buttons are clicked quit the game
+			self.get_tree().quit()
+
 	# read the rotation of the camera
 	var aim = get_node("yaw/heroCamera").get_global_transform().basis
 	# calculate the direction where the player want to move
@@ -70,8 +76,3 @@ func _fly(delta):
 			if (motion.length()<0.001):
 				break
 		attempts-=1
-		
-func _process(delta):
-	if(Input.is_key_pressed(KEY_ESCAPE)):
-		if(Input.is_key_pressed(KEY_SHIFT)):
-			self.get_tree().quit()
