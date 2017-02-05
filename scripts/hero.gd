@@ -53,26 +53,26 @@ func _fly(delta):
 	direction = direction.normalized()
 		
 	# calculate the target where the player want to move
-	var target=direction*FLY_SPEED
+	var target = direction*FLY_SPEED
 	
 	# calculate the velocity to move the player toward the target
-	velocity=Vector3().linear_interpolate(target,FLY_ACCEL*delta)
+	velocity = Vector3().linear_interpolate(target, FLY_ACCEL*delta)
 	
 	# move the node
-	var motion=velocity*delta
-	motion=move(motion)
+	var motion = velocity*delta
+	motion = self.move(motion)
 	
 	# slide until it doesn't need to slide anymore, or after n times
-	var original_vel=velocity
-	var attempts=4 # number of attempts to slide the node
+	var original_vel = velocity
+	var attempts = 4 # number of attempts to slide the node
 	
-	while(attempts and is_colliding()):
-		var n=get_collision_normal()
-		motion=n.slide(motion)
-		velocity=n.slide(velocity)
+	while(attempts and self.is_colliding()):
+		var n = self.get_collision_normal()
+		motion = n.slide(motion)
+		velocity = n.slide(velocity)
 		# check that the resulting velocity is not opposite to the original velocity, which would mean moving backward.
 		if(original_vel.dot(velocity)>0):
-			motion=move(motion)
-			if (motion.length()<0.001):
+			motion = self.move(motion)
+			if (motion.length() < 0.001):
 				break
-		attempts-=1
+		attempts -= 1
