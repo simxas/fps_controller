@@ -64,4 +64,13 @@ environment = null
 h_offset = 0.0
 v_offset = 0.0
 
+[node name="ray" type="RayCast" parent="."]
+
+_import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
+transform/local = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0 )
+enabled = true
+cast_to = Vector3( 0, -0.8, 0 )
+layer_mask = 1
+type_mask = 15
+
 
